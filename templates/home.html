@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>web2_lab3</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+<canvas id="canvas" style="display: block; margin-left: auto; margin-right: auto; width: 99%"></canvas>
+</body>
+
+<script>
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+    window_width = window.innerWidth;
+    window_height = window.innerHeight;
+    canvas.width = window_width;
+    canvas.height = window_height;
+
+    canvas.style.background = "yellow";
+
+    counter = 0;
+
+    class Square {
+        constructor(x_pos, y_pos, length, speed) {
+            this.position_x = x_pos;
+            this.position_y = y_pos;
+            this.length = length;
+            this.speed = speed;
+            this.delta_x = 1 * this.speed;
+            this.delta_y = 1 * this.speed;
+        }
+
+        draw(context) {
+            context.beginPath();
+            context.strokeStyle = 'black';
+            context.lineWidth = 3;
+            context.rect(this.position_x - this.length, this.position_y - this.length, this.length * 2, this.length * 2);
+            context.fillStyle = 'red';
+            context.fill();
+            context.stroke();
+            context.closePath();
+        }
+
+        update() {
+            this.draw(context);
+
+            let speed_difference = get_random_number(-0.4, 0.7)
+            if ((this.position_x + this.length) > window_width) {
+                this.delta_x = -this.delta_x;
+                this.delta_x += speed_difference;
+                this.delta_y += speed_difference;
+            }
+
+            if ((this.position_x - this.length) < 0) {
+                this.delta_x = -this.delta_x;
+                this.delta_x += speed_difference;
+                this.delta_y += speed_difference;
+            }
+            if ((this.position_y - this.length) < 0) {
+                this.delta_y = -this.delta_y;
+                this.delta_y += speed_difference;
+                this.delta_x += speed_difference;
+            }
+            if ((this.position_y + this.length) > window_height) {
+                this.delta_y = -this.delta_y;
+                this.delta_y += speed_difference;
+                this.delta_x += speed_difference;
+            }
+            this.position_x += this.delta_x;
+            this.position_y += this.delta_y;
+
+        }
+    }
+
+    let calculate_distance = function (xpos1, ypos1, xpos2, ypos2) {
+        return Math.sqrt(Math.pow(xpos2 - xpos1, 2) + Math.pow(ypos2 - ypos1, 2));
+    }
+    let get_random_number = function (min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    let updateScore = function (score, number_of_squares) {
+        context.font = "30px Consolas";
+        context.fillStyle = "red";
+        context.textAlign = "end";
+        context.fillText("Score: " + score + "/" + Math.ceil(number_of_squares), canvas.width - 30, 50);
+    }
+    let all_squares = [];
+    let number_of_squares = get_random_number(1, 20);
+    for (let i = 0; i < number_of_squares; i++) {
+        let radius = 35;
+        let random_x = get_random_number(radius, (window_width - radius));
+        let random_y = get_random_number(radius, (window_height - radius));
+        for (let a = 0; a < all_squares.length; a++) {
+            if ((calculate_distance(random_x, random_y, all_squares[a].xpos, all_squares[a].ypos) - radius + all_squares[a].radius < 0)) {
+                random_x = get_random_number(radius, (window_width - radius));
+                random_y = get_random_number(radius, (window_height - radius));
+            }
+            a = all_squares.length;
+        }
+        let my_square = new Square(random_x, random_y, radius, get_random_number(1.5, 2.5), 'Black');
+        all_squares.push(my_square);
+    }
+    let update_square = function () {
+        requestAnimationFrame(update_square);
+
+        context.clearRect(0, 0, window_width, window_height);
+        all_squares.forEach(element => {
+            element.update();
+        })
+        updateScore(counter, number_of_squares)
+    }
+    update_square();
+    canvas.addEventListener('click', (event) => {
+        let click_x = event.pageX;
+        let click_y = event.pageY;
+        let clickedElement = all_squares.findLast(element =>
+            element.position_x + 50 > click_x &&
+            element.position_x - 50 < click_x &&
+            element.position_y + 50 > click_y &&
+            element.position_y - 50 < click_y
+        )
+        if (clickedElement !== undefined) {
+            all_squares.splice(all_squares.indexOf(clickedElement), 1);
+            counter += 1;
+        }
+    });
+</script>
+
+</html>
