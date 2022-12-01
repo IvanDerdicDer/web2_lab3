@@ -49,24 +49,24 @@
 
             let speed_difference = get_random_number(-0.4, 0.7)
             if ((this.position_x + this.length) > window_width) {
+                this.delta_x += speed_difference;
                 this.delta_x = -this.delta_x;
-                this.delta_x -= speed_difference;
                 this.delta_y += speed_difference;
             }
 
             if ((this.position_x - this.length) < 0) {
-                this.delta_x = -this.delta_x;
                 this.delta_x += speed_difference;
+                this.delta_x = -this.delta_x;
                 this.delta_y += speed_difference;
             }
             if ((this.position_y - this.length) < 0) {
+                this.delta_y += speed_difference;
                 this.delta_y = -this.delta_y;
-                this.delta_y -= speed_difference;
                 this.delta_x += speed_difference;
             }
             if ((this.position_y + this.length) > window_height) {
-                this.delta_y = -this.delta_y;
                 this.delta_y += speed_difference;
+                this.delta_y = -this.delta_y;
                 this.delta_x += speed_difference;
             }
             this.position_x += this.delta_x;
