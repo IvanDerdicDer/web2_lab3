@@ -47,32 +47,50 @@
         update() {
             this.draw(context);
 
-            let speed_difference = get_random_number(-0.4, 0.7)
+            let speedDiff = get_random_number(-0.5, 0.6)
+
+            if ((this.position_y - this.length) < 0) {
+                this.delta_y = -this.delta_y;
+                this.delta_y += speedDiff;
+                if (this.delta_x > 0) {
+                    this.delta_x += speedDiff;
+                } else {
+                    this.delta_x -= speedDiff;
+                }
+            }
+
+            if ((this.position_y + this.length) > window_height) {
+                this.delta_y = -this.delta_y;
+                this.delta_y -= speedDiff;
+                if (this.delta_x > 0) {
+                    this.delta_x += speedDiff;
+                } else {
+                    this.delta_x -= speedDiff;
+                }
+            }
+
             if ((this.position_x + this.length) > window_width) {
-                this.delta_x += speed_difference;
                 this.delta_x = -this.delta_x;
-                this.delta_y += speed_difference;
+                this.delta_x -= speedDiff;
+                if (this.delta_y > 0) {
+                    this.delta_y += speedDiff;
+                } else {
+                    this.delta_y -= speedDiff;
+                }
             }
 
             if ((this.position_x - this.length) < 0) {
-                this.delta_x += speed_difference;
                 this.delta_x = -this.delta_x;
-                this.delta_y += speed_difference;
+                this.delta_x += speedDiff;
+                if (this.delta_y > 0) {
+                    this.delta_y += speedDiff;
+                } else {
+                    this.delta_y -= speedDiff;
+                }
             }
 
-            this.position_y += this.delta_y;
-
-            if ((this.position_y - this.length) < 0) {
-                this.delta_y += speed_difference;
-                this.delta_y = -this.delta_y;
-                this.delta_x += speed_difference;
-            }
-            if ((this.position_y + this.length) > window_height) {
-                this.delta_y += speed_difference;
-                this.delta_y = -this.delta_y;
-                this.delta_x += speed_difference;
-            }
             this.position_x += this.delta_x;
+            this.position_y += this.delta_y;
 
         }
     }
