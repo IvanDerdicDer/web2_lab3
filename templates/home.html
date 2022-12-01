@@ -81,7 +81,7 @@
     let get_random_number = function (min, max) {
         return Math.random() * (max - min) + min;
     }
-    let updateScore = function (score, number_of_squares) {
+    let update_score = function (score, number_of_squares) {
         context.font = "30px Consolas";
         context.fillStyle = "red";
         context.textAlign = "end";
@@ -110,7 +110,7 @@
         all_squares.forEach(element => {
             element.update();
         })
-        updateScore(counter, number_of_squares)
+        update_score(counter, number_of_squares)
     }
     update_square();
     canvas.addEventListener('click', (event) => {
