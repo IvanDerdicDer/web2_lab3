@@ -19,7 +19,12 @@
     canvas.width = window_width;
     canvas.height = window_height;
 
-    canvas.style.background = "yellow";
+    let gradient = context.createRadialGradient(window_width / 2, window_height / 2, window_width / 8, window_width / 2, window_height / 2, window_width / 2);
+    gradient.addColorStop(0, 'yellow');
+    gradient.addColorStop(1, 'blue');
+
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, window_width, window_height);
 
     counter = 0;
 
@@ -37,9 +42,14 @@
             context.beginPath();
             context.strokeStyle = 'black';
             context.lineWidth = 3;
+
+            let gradient = context.createRadialGradient(this.position_x, this.position_y, this.length / 4, this.position_x, this.position_y, this.length);
+            gradient.addColorStop(0, 'red');
+            gradient.addColorStop(1, 'green');
+
             context.rect(this.position_x - this.length, this.position_y - this.length, this.length * 2, this.length * 2);
-            context.fillStyle = 'red';
-            context.fill();
+            context.fillStyle = gradient;
+            context.fillRect(this.position_x - this.length, this.position_y - this.length, this.length * 2, this.length * 2);
             context.stroke();
             context.closePath();
         }
@@ -95,15 +105,15 @@
         }
     }
 
-    let calculate_distance = function (xpos1, ypos1, xpos2, ypos2) {
-        return Math.sqrt(Math.pow(xpos2 - xpos1, 2) + Math.pow(ypos2 - ypos1, 2));
+    let calculate_distance = function (x_pos1, y_pos1, x_pos2, y_pos2) {
+        return Math.sqrt(Math.pow(x_pos2 - x_pos1, 2) + Math.pow(y_pos2 - y_pos1, 2));
     }
     let get_random_number = function (min, max) {
         return Math.random() * (max - min) + min;
     }
     let update_score = function (score, number_of_squares) {
         context.font = "30px Consolas";
-        context.fillStyle = "red";
+        context.fillStyle = "magenta";
         context.textAlign = "end";
         context.fillText("Score: " + score + "/" + Math.ceil(number_of_squares), canvas.width - 30, 50);
     }
@@ -120,13 +130,21 @@
             }
             a = all_squares.length;
         }
-        let my_square = new Square(random_x, random_y, radius, get_random_number(1.5, 2.5));
-        all_squares.push(my_square);
+        let tmp_square = new Square(random_x, random_y, radius, get_random_number(1.5, 2.5));
+        all_squares.push(tmp_square);
     }
     let update_square = function () {
         requestAnimationFrame(update_square);
 
         context.clearRect(0, 0, window_width, window_height);
+
+        let gradient = context.createRadialGradient(window_width / 2, window_height / 2, window_width / 8, window_width / 2, window_height / 2, window_width / 2);
+        gradient.addColorStop(0, 'yellow');
+        gradient.addColorStop(1, 'blue');
+
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, window_width, window_height);
+
         all_squares.forEach(element => {
             element.update();
         })
