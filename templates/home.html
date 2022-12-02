@@ -26,7 +26,7 @@
     context.fillStyle = gradient;
     context.fillRect(0, 0, window_width, window_height);
 
-    counter = 0;
+    let counter = 0;
 
     class Square {
         constructor(x_pos, y_pos, length, speed) {
@@ -34,8 +34,8 @@
             this.position_y = y_pos;
             this.length = length;
             this.speed = speed;
-            this.delta_x = 1 * this.speed;
-            this.delta_y = 1 * this.speed;
+            this.delta_x = this.speed;
+            this.delta_y = this.speed;
         }
 
         draw(context) {
@@ -57,7 +57,7 @@
         update() {
             this.draw(context);
 
-            let speedDiff = get_random_number(-0.5, 0.6)
+            let speedDiff = get_random_number(-0.4, 0.5)
 
             if ((this.position_y - this.length) < 0) {
                 this.delta_y = -this.delta_y;
@@ -118,9 +118,14 @@
         context.fillText("Score: " + score + "/" + Math.ceil(number_of_squares), canvas.width - 30, 50);
     }
     let all_squares = [];
-    let number_of_squares = get_random_number(1, 20);
+    let number_of_squares = get_random_number(1, 15);
     for (let i = 0; i < number_of_squares; i++) {
-        let radius = 35;
+        let radius = 0;
+        if (window_width < window_height){
+            radius = 0.02 * window_width;
+        }else{
+            radius = 0.02 * window_height;
+        }
         let random_x = get_random_number(radius * 2, (window_width - radius * 2));
         let random_y = get_random_number(radius * 2, (window_height - radius * 2));
         for (let a = 0; a < all_squares.length; a++) {
@@ -130,7 +135,7 @@
             }
             a = all_squares.length;
         }
-        let tmp_square = new Square(random_x, random_y, radius, get_random_number(1.5, 2.5));
+        let tmp_square = new Square(random_x, random_y, radius, get_random_number(1, 2));
         all_squares.push(tmp_square);
     }
     let update_square = function () {
@@ -149,6 +154,15 @@
             element.update();
         })
         update_score(counter, number_of_squares)
+        if(all_squares.length === 0){
+            context.clearRect(0, 0, window_width, window_height);
+
+            context.font = "60px Consolas";
+            context.fillStyle = "green";
+            context.textAlign = "center";
+            context.fillText("FINAL SCORE: " + counter, window_width / 2, window_height / 2);
+        }
+        console.log(all_squares)
     }
     update_square();
     canvas.addEventListener('click', (event) => {
