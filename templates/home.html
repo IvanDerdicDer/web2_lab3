@@ -120,22 +120,22 @@
     let all_squares = [];
     let number_of_squares = get_random_number(1, 15);
     for (let i = 0; i < number_of_squares; i++) {
-        let radius = 0;
+        let length = 0;
         if (window_width < window_height){
-            radius = 0.02 * window_width;
+            length = 0.02 * window_width;
         }else{
-            radius = 0.02 * window_height;
+            length = 0.02 * window_height;
         }
-        let random_x = get_random_number(radius * 2, (window_width - radius * 2));
-        let random_y = get_random_number(radius * 2, (window_height - radius * 2));
+        let random_x = get_random_number(length * 2, (window_width - length * 2));
+        let random_y = get_random_number(length * 2, (window_height - length * 2));
         for (let a = 0; a < all_squares.length; a++) {
-            if ((calculate_distance(random_x, random_y, all_squares[a].position_x, all_squares[a].position_y) - radius + all_squares[a].length < 0)) {
-                random_x = get_random_number(radius * 2, (window_width - radius * 2));
-                random_y = get_random_number(radius * 2, (window_height - radius * 2));
+            if ((calculate_distance(random_x, random_y, all_squares[a].position_x, all_squares[a].position_y) - length + all_squares[a].length < 0)) {
+                random_x = get_random_number(length * 2, (window_width - length * 2));
+                random_y = get_random_number(length * 2, (window_height - length * 2));
             }
             a = all_squares.length;
         }
-        let tmp_square = new Square(random_x, random_y, radius, get_random_number(1, 2));
+        let tmp_square = new Square(random_x, random_y, length, get_random_number(1, 2));
         all_squares.push(tmp_square);
     }
     let update_square = function () {
